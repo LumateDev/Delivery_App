@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit
 private const val CONNECT_TIMEOUT_INTERVAL_SEC = 10L
 private const val READ_TIMEOUT_INTERVAL_SEC = 10L
 private const val WRITE_TIMEOUT_INTERVAL_SEC = 10L
-private const val BASE_URL = "http://192.168.0.91:8000/"
+private const val BASE_URL = "http://192.168.0.91:8080/"
+
 
 object Connection {
 

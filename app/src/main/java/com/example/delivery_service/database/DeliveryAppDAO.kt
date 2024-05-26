@@ -1,4 +1,5 @@
 package com.example.delivery_service.database
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,6 +11,7 @@ import com.example.delivery_service.models.DeliveryDepartment
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
+@Dao
 interface DeliveryAppDAO {
 
     @Query("SELECT * FROM deliveryDepartments ORDER BY deliveryDepartmentName")

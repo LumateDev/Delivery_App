@@ -1,6 +1,5 @@
 package com.example.delivery_service.repository
 
-import android.icu.text.Edits
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +7,11 @@ import androidx.lifecycle.asLiveData
 import com.example.delivery_service.ApplicationDelivery
 import com.example.delivery_service.api.Connection
 import com.example.delivery_service.api.CouriersPost
-import com.example.delivery_service.api.CouriersPostResult
 import com.example.delivery_service.api.CouriersResponse
 import com.example.delivery_service.api.DeliveryAPI
 import com.example.delivery_service.api.DeliveryDepartmentsPost
-import com.example.delivery_service.api.DeliveryDepartmentsPostResult
 import com.example.delivery_service.api.DeliveryDepartmentsResponse
+import com.example.delivery_service.api.PostResultAPI
 import com.example.delivery_service.database.InternalDB
 import com.example.delivery_service.models.Courier
 import com.example.delivery_service.models.DeliveryDepartment
@@ -89,6 +87,11 @@ class DataRepository private constructor() {
                         localeDB.insertDeliveryDepartments(elem)
                     }
 
+//                    for (elem in departments!!.elems)
+//                    {
+//                        Log.d(API, "Получили отделы =${elem.deliveryDepartmentName}")
+//                    }
+
                     fetchCouriers()
                 }
             }
@@ -118,13 +121,13 @@ class DataRepository private constructor() {
     }
 
     private fun postDeliveryDepartments(action: Int, deliveryDepartment: DeliveryDepartment) {
-        deliveryAPI.postDeliveryDepartments(DeliveryDepartmentsPost(action, deliveryDepartment)).enqueue(object : Callback<DeliveryDepartmentsPostResult>{
-            override fun onResponse(p0: Call<DeliveryDepartmentsPostResult>, p1: Response<DeliveryDepartmentsPostResult>) {
+        deliveryAPI.postDeliveryDepartments(DeliveryDepartmentsPost(action, deliveryDepartment)).enqueue(object : Callback<PostResultAPI>{
+            override fun onResponse(p0: Call<PostResultAPI>, p1: Response<PostResultAPI>) {
                 Log.d(API, "Запрос с отделом доставки = ${deliveryDepartment.deliveryDepartmentName}, отправлен с кодом=${action}}")
                 fetchDeliveryDepartments()
             }
 
-            override fun onFailure(p0: Call<DeliveryDepartmentsPostResult>, p1: Throwable) {
+            override fun onFailure(p0: Call<PostResultAPI>, p1: Throwable) {
                 Log.d(API, "Ошибка запроса с кодом=${action}, для отдела доставки= ${deliveryDepartment.deliveryDepartmentName}")
             }
 
@@ -132,13 +135,13 @@ class DataRepository private constructor() {
     }
 
     private fun postCourier(action: Int, courier: Courier) {
-        deliveryAPI.postCouriers(CouriersPost(action, courier)).enqueue(object : Callback<CouriersPostResult>{
-            override fun onResponse(p0: Call<CouriersPostResult>, p1: Response<CouriersPostResult>) {
+        deliveryAPI.postCouriers(CouriersPost(action, courier)).enqueue(object : Callback<PostResultAPI>{
+            override fun onResponse(p0: Call<PostResultAPI>, p1: Response<PostResultAPI>) {
                 Log.d(API, "Запрос с доставщиком = ${courier.firstName + " " + courier.lastName}, отправлен с кодом=${action}}")
                 fetchDeliveryDepartments()
             }
 
-            override fun onFailure(p0: Call<CouriersPostResult>, p1: Throwable) {
+            override fun onFailure(p0: Call<PostResultAPI>, p1: Throwable) {
                 Log.d(API, "Ошибка запроса с кодом=${action}, для доставщика =${courier.firstName + " " + courier.lastName}")
             }
 
