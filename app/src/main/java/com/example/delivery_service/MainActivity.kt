@@ -9,15 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.delivery_service.fragments.CourierEditFragment
 import com.example.delivery_service.fragments.DepartmentFragment
+import com.example.delivery_service.fragments.InfoCourierFragment
+import com.example.delivery_service.models.Courier
 
 class MainActivity : AppCompatActivity(), ActivityInterface {
 
     companion object {
         const val deliveryDeparmentsId = 0
-        const val courierUpdate = 1
-        const val courierAppend = 2
-        const val infoCourierId = 3
+        const val courierEdit = 1
+        const val infoCourierId = 2
     }
 
     interface Edit {
@@ -29,7 +31,6 @@ class MainActivity : AppCompatActivity(), ActivityInterface {
     private var _miCreateDeliveryDepartment: MenuItem? = null
     private var _miUpdateDeliveryDepartment: MenuItem? = null
     private var _miDeleteDeliveryDepartment: MenuItem? = null
-
     private var currentFragmentId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +44,7 @@ class MainActivity : AppCompatActivity(), ActivityInterface {
                     deliveryDeparmentsId -> {
                         finish()
                     }
-                    courierAppend -> {
-                        currentFragmentId = deliveryDeparmentsId
-
-                    }
-                    courierUpdate -> {
+                    courierEdit -> {
                         currentFragmentId = deliveryDeparmentsId
                     }
                     infoCourierId -> {
@@ -85,13 +82,12 @@ class MainActivity : AppCompatActivity(), ActivityInterface {
         title = newTitle
     }
 
-    override fun setFragment(fragmentId: Int) {
+    override fun setFragment(fragmentId: Int, courier: Courier?) {
         currentFragmentId = fragmentId
         when (fragmentId) {
             deliveryDeparmentsId -> { setFragment(DepartmentFragment.getInstance()) }
-            courierUpdate -> {}
-            courierAppend -> {}
-            infoCourierId -> {}
+            courierEdit -> {setFragment(CourierEditFragment.newInstance(courier))}
+            infoCourierId -> {setFragment(InfoCourierFragment.getInstance())}
         }
         updateMenuView()
     }

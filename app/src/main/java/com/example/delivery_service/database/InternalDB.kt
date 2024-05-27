@@ -12,7 +12,7 @@ import com.example.delivery_service.models.DeliveryDepartment
 
 @Database(
     entities = [DeliveryDepartment::class, Courier::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 

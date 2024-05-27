@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Delivery_Service</string>
+
+
+    <string-array name="vehicleType">
+        <item>Автомобиль</item>
+        <item>Велосипед</item>
+        <item>Скутер</item>
+    </string-array>
+
 </resources>

@@ -42,7 +42,7 @@ data class Courier(
     @SerializedName("start_date")
     var startDate : Long = Date().time, // Дата начала работы
     @SerializedName("vehicle_type")
-    var vehicleType : String = "",  // Тип транспорта
+    var vehicleType : Int = 0,  // Тип транспорта
     @SerializedName("license_number")
     var licenseNumber : String = "" //Номер лицензии
 ){

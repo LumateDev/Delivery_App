@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -49,7 +50,7 @@ class DepartmentFragment : Fragment(), MainActivity.Edit {
         viewModel = ViewModelProvider(this).get(DepartmentViewModel::class.java)
         DataRepository.getInstance().currentDeliveryDepartment.observe(viewLifecycleOwner){
             val ma = (requireActivity() as ActivityInterface)
-            ma.updateTitle("Отделы доставки \"${viewModel.department?.deliveryDepartmentName}\"")
+            ma.updateTitle("Отдел доставки \"${viewModel.department?.deliveryDepartmentName}\"")
         }
         viewModel.departmentList.observe(viewLifecycleOwner) {
             createUI(it)
@@ -124,10 +125,19 @@ class DepartmentFragment : Fragment(), MainActivity.Edit {
         val inputName = mDialogView.findViewById<EditText>(R.id.etDepName)
         AlertDialog.Builder(requireContext())
             .setTitle("Информация об отделе доставки")
+
             .setView(mDialogView)
+
+
             .setPositiveButton("Добавить") { _, _ ->
-                if (inputName.text.isNotBlank()) {
+                if (inputName.text.isNotBlank() && !inputName.text.matches(Regex("^\\d+$"))) {
                     viewModel.appendDepartment(inputName.text.toString())
+
+                } else {
+                    // Поле пусто или содержит только цифры, показываем уведомление
+                    Toast.makeText(context, "Поле заполнено неверно", Toast.LENGTH_SHORT).show()
+
+
                 }
             }
             .setNegativeButton("Отмена", null)
@@ -143,13 +153,14 @@ class DepartmentFragment : Fragment(), MainActivity.Edit {
         AlertDialog.Builder(requireContext())
             .setTitle("Информация об отделе доставки")
             .setView(mDialogView)
+            .setNegativeButton("Отмена", null)
             .setPositiveButton("Изменить") { _, _ ->
                 if (inputName.text.isNotBlank()) {
                     department.deliveryDepartmentName = inputName.text.toString()
                     viewModel.updateDepartment(department)
                 }
             }
-            .setNegativeButton("Отмена", null)
+
             .setCancelable(true)
             .create()
             .show()

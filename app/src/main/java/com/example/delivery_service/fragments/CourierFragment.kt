@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -25,13 +26,14 @@ import com.example.delivery_service.models.DeliveryDepartment
 class CourierFragment : Fragment() {
 
     private lateinit var deliveryDepartment: DeliveryDepartment
+    private lateinit var vehicleType: Array<String>
 
     companion object {
         private var INSTANCE: CourierFragment? = null
 
         fun getInstance(): CourierFragment {
             if (INSTANCE == null) INSTANCE = CourierFragment()
-            return INSTANCE ?: throw Exception("OrdersFragment не создан!")
+            return INSTANCE ?: throw Exception("CourierFragment не создан!")
         }
         fun newInstance(deliveryDepartment: DeliveryDepartment): CourierFragment {
             return CourierFragment().apply { this.deliveryDepartment = deliveryDepartment }
@@ -49,6 +51,7 @@ class CourierFragment : Fragment() {
         _binding = FragmentCourierBinding.inflate(inflater, container, false)
 
         binding.rvCouriers.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        vehicleType = resources.getStringArray(R.array.vehicleType)
         return binding.root
     }
 
@@ -62,7 +65,7 @@ class CourierFragment : Fragment() {
 
         binding.fabAdd.setOnClickListener {
 
-            //(requireContext() as ActivityInterface).setFragment(MainActivity.pupilEdit, null)
+            (requireContext() as ActivityInterface).setFragment(MainActivity.courierEdit, null)
         }
     }
 
@@ -90,11 +93,11 @@ class CourierFragment : Fragment() {
         private var lastView: View? = null
         private fun updateCurrentView(view: View) {
             lastView?.findViewById<ConstraintLayout>(R.id.clCourier)?.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.white))
-            //lastView?.findViewById<LinearLayout>(R.id.llButtons)?.visibility = View.GONE
+                ContextCompat.getColor(requireContext(), R.color.ligthGray))
+            lastView?.findViewById<LinearLayout>(R.id.llButtons)?.visibility = View.GONE
             view.findViewById<ConstraintLayout>(R.id.clCourier)?.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.yellow))
-            //view?.findViewById<LinearLayout>(R.id.llButtons)?.visibility = View.VISIBLE
+                ContextCompat.getColor(requireContext(), R.color.darkGray))
+            view?.findViewById<LinearLayout>(R.id.llButtons)?.visibility = View.VISIBLE
             lastView = view
         }
 
@@ -137,7 +140,7 @@ class CourierFragment : Fragment() {
                 clCourier.setOnClickListener(clickItem)
                 clCourier.setOnLongClickListener{
                     it.callOnClick()
-                    val toast = Toast.makeText(requireContext(), "класс: ${courier.vehicleType}", Toast.LENGTH_SHORT)
+                    val toast = Toast.makeText(requireContext(), "Тип доставки: ${vehicleType[courier.vehicleType]}", Toast.LENGTH_SHORT)
                     toast.show()
                     true
                 }
@@ -152,7 +155,7 @@ class CourierFragment : Fragment() {
                 }
 
                 ibUpdate.setOnClickListener {
-                    (requireContext() as ActivityInterface).setFragment(MainActivity.courierUpdate)
+                    (requireContext() as ActivityInterface).setFragment(MainActivity.courierEdit, courier)
                 }
 
                 ibDelete.setOnClickListener {
